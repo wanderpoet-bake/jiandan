@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>煎蛋的剧本小屋</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 用户信息 -->
+        <div class="user-info" id="userInfo">
+            <span id="userGreeting">欢迎来到剧本小屋</span>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+        </div>
+        
+        <!-- 网站标题 -->
+        <div class="header">
+            <h1>🍳 欢迎来到煎蛋的剧本小屋</h1>
+            <p class="subtitle">沉浸式多人互动剧本体验</p>
+        </div>
+        
+        <!-- 游戏列表 -->
+        <div class="games-grid" id="gamesGrid">
+            <div class="game-card" onclick="enterGame('love-virus')">
+                <h3>11、爱情病毒</h3>
+                <div class="game-id">剧本编号: LV-2024-11</div>
+                <div class="description">
+                    一场突如其来的"爱情病毒"席卷城市，感染者会疯狂爱上第一个见到的人。
+                    8个陌生人被困在一起，他们的选择将决定彼此的命运...
+                </div>
+                <div class="status">
+                    <span class="players-count">👥 2-8人游戏</span>
+                    <button class="play-btn">进入剧本</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 页脚 -->
+        <div class="footer">
+            <p>© 2024 煎蛋的剧本小屋 | 沉浸式互动体验平台</p>
+        </div>
+    </div>
+
+    <!-- Socket.io 客户端库 -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // 动态配置Socket.io连接
+        const socket = io({
+            transports: ['websocket', 'polling']
+        });
+    </script>
+    
+    <script src="/js/utils.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/home.js"></script>
+</body>
+</html>

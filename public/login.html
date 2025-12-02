@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 剧本小屋</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>🍳 登录剧本小屋</h2>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="username" placeholder="输入任意用户名">
+                </div>
+                
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="password" placeholder="请输入密码" value="123456">
+                    <small>统一密码：123456</small>
+                </div>
+                
+                <button type="submit" class="login-btn">登录</button>
+            </form>
+            
+            <a href="/" class="back-link">← 返回首页</a>
+        </div>
+    </div>
+
+    <!-- Socket.io 客户端库 -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // 动态配置Socket.io连接
+        const socket = io({
+            transports: ['websocket', 'polling']
+        });
+    </script>
+    
+    <script src="/js/utils.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/login.js"></script>
+</body>
+</html>

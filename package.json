@@ -1,0 +1,21 @@
+{
+  "name": "script-house",
+  "version": "1.0.0",
+  "description": "煎蛋的剧本小屋 - 多人互动剧本平台",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'No build step required'",
+    "vercel-build": "echo 'Vercel build completed'"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "socket.io": "^4.7.0",
+    "bcryptjs": "^2.4.0",
+    "jsonwebtoken": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
