@@ -1,12 +1,9 @@
 // 工具函数
 const utils = {
-    // 动态获取API基础URL
+    // 获取API基础URL - 简化版本
     getApiBase() {
-        // Vercel环境使用相对路径，开发环境使用绝对路径
-        if (window.location.hostname === 'localhost') {
-            return 'http://localhost:3000/api';
-        }
-        return '/api';
+        // 本地开发环境直接使用当前域名和端口
+        return `${window.location.origin}/api`;
     },
     
     // 显示消息

@@ -11,16 +11,16 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const server = createServer(app);
 
-// Vercel适配：动态端口
-const PORT = process.env.PORT || 3000;
+// 本地运行端口配置
+const PORT = 3000;
+const HOST = '0.0.0.0';
 
-// Socket.io配置适配Vercel
+// Socket.io配置
 const io = new Server(server, {
   cors: {
-    origin: process.env.VERCEL_URL 
-      ? [`https://${process.env.VERCEL_URL}`, process.env.VERCEL_URL] 
-      : "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: "*", // 允许所有来源
+    methods: ["GET", "POST"],
+    credentials: true
   },
   transports: ['websocket', 'polling']
 });
@@ -29,8 +29,8 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// JWT密钥 - 使用环境变量
-const JWT_SECRET = process.env.JWT_SECRET || 'script-house-secret-key-2024';
+// JWT密钥 - 本地开发使用固定密钥
+const JWT_SECRET = 'script-house-local-secret-key-2024';
 
 // 游戏数据存储（使用内存，生产环境建议用数据库）
 const games = {
@@ -50,6 +50,32 @@ const games = {
 
 // 用户存储
 const users = new Map();
+
+// 静态文件服务
+app.use(express.static('public'));
+
+// 路由配置
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+app.get('/game-love-virus.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'game-love-virus.html'));
+});
+
+// 健康检查端点（简化版）
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        message: '服务器运行正常',
+        timestamp: new Date().toISOString(),
+        games: Object.keys(games).length
+    });
+});
 
 // API路由
 app.post('/api/login', async (req, res) => {
@@ -96,16 +122,6 @@ app.post('/api/login', async (req, res) => {
             nickname: userNickname,
             loginTime: new Date().toLocaleString('zh-CN')
         }
-    });
-});
-
-// 健康检查端点（Vercel需要）
-app.get('/api/health', (req, res) => {
-    res.json({ 
-        status: 'ok', 
-        timestamp: new Date().toISOString(),
-        games: Object.keys(games).length,
-        environment: process.env.NODE_ENV || 'development'
     });
 });
 
@@ -283,22 +299,17 @@ io.on('connection', (socket) => {
     });
 });
 
-// Vercel适配：导出处理函数
-export default async function handler(req, res) {
-    // 让Express处理请求
-    return app(req, res);
-}
-
-// 启动服务器（仅开发环境）
-if (process.env.NODE_ENV !== 'production') {
-    server.listen(PORT, () => {
-        console.log(`
+// 启动服务器
+server.listen(PORT, HOST, () => {
+    console.log(`
 🎮 煎蛋的剧本小屋服务器启动成功！
-📍 本地访问: http://localhost:${PORT}
-🌐 Vercel部署: 准备就绪
+📍 本地访问: http://${HOST}:${PORT}
+🌐 环境: 本地开发
 🎯 当前游戏: 爱情病毒 (2-8人)
 🔒 统一密码: 123456
 📡 Socket.io: 已启用
-        `);
-    });
-}
+💡 运行模式: 纯本地运行
+    `);
+});
+
+export default app;
